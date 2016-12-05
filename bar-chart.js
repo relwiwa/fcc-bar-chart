@@ -1,13 +1,21 @@
-var width = 1080;
-var height = 600;
+var margin = {
+  top: 20,
+  right: 30,
+  bottom: 30,
+  left:40
+};
+var width = 1080 - margin.left - margin.right;
+var height = 600 - margin.top - margin.bottom;
 
 // functions that maps values to y coords in chart
 var y = d3.scale.linear()
   .range([height, 0]);
 
 var chart = d3.select('.chart')
-  .attr('width', width)
-  .attr('height', height);
+  .attr('width', width + margin.left + margin.right)
+  .attr('height', height + margin.top + margin.bottom)
+  .append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json', function(error, json) {
   if (error) {
