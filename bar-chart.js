@@ -11,6 +11,15 @@ var height = 600 - margin.top - margin.bottom;
 var y = d3.scale.linear()
   .range([height, 0]);
 
+var yAxis = d3.svg.axis()
+  .scale(y)
+  .orient('left')
+  .ticks(10)
+  .tickFormat(function (d) {
+    d = d/1000;
+    return d + "k";
+  });
+
 var chart = d3.select('.chart')
   .attr('width', width + margin.left + margin.right)
   .attr('height', height + margin.top + margin.bottom)
@@ -27,6 +36,16 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
     y.domain([0, d3.max(data, function(d) {
       return d[1];
     })]);
+    
+    chart.append('g')
+      .attr('class', 'y axis')
+      .call(yAxis)
+      .append('text')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', 6)
+        .attr('dy', '.71em')
+        .style('text-anchor', 'end')
+        .text('GDP in Billion US-$');    
     
     var barWidth = width / data.length;
     

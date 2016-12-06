@@ -14,7 +14,7 @@
 
 .axis text {
   font: 10px sans-serif;
-  stroke:#000;
+  fill:#000;
 }
 
 .axis path,
