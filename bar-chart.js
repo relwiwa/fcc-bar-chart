@@ -28,14 +28,33 @@ var chart = d3.select('.chart')
 
 d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json', function(error, json) {
   if (error) {
-    console.error("Error happened reading JSON data");
+    console.error('Error happened reading JSON data');
   }
   else {
     var data = json.data;
     
+    var x = d3.time.scale()
+      .range([10, width])
+      .domain([
+        d3.min(data, function(d) {
+          return new Date(d[0]);
+        }),
+        d3.max(data, function(d) {
+          return new Date(d[0]);
+        })]);
+
+    var xAxis = d3.svg.axis()
+    .orient('bottom')
+    .scale(x);
+    
     y.domain([0, d3.max(data, function(d) {
       return d[1];
     })]);
+        
+    chart.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(xAxis);
     
     chart.append('g')
       .attr('class', 'y axis')
@@ -45,27 +64,27 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
         .attr('y', 6)
         .attr('dy', '.71em')
         .style('text-anchor', 'end')
-        .text('GDP in Billion US-$');    
+        .text('GDP in Billion US-$');
     
-    var barWidth = width / data.length;
-    
-    var bar = chart.selectAll('g')
+    chart.selectAll('.bar')
       .data(data)
-    .enter().append('g')
-      .attr('transform', function(d, i) {
-        return 'translate(' + i * barWidth + ',0)';
-      });
-    
-    bar.append('rect')
+    .enter().append('rect')
+      .attr('class', 'bar')
+      .attr('x', function(d) {
+        return x(new Date(d[0]));
+      })
       .attr('y', function(d) {
         return y(d[1]);
       })
       .attr('height', function(d) {
         return height - y(d[1]);
       })
-      .attr('width', barWidth - 1);
+      .attr('width', width/data.length + 1);
   } 
+
 });
+
+
 
 function toInteger(d) {
   d.data[1] = +d.data[1];
