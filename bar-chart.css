@@ -1,9 +1,18 @@
+body {
+  width:100%;
+  height:100%;
+  background:#e0f3db;
+  margin:0 auto;
+  text-align:center;
+  font-family:sans-serif;
+}
+
 .chart {
-  background:#ddd;
+  background:#fff;
 }
 
 .chart rect {
-  fill: steelblue;
+  fill:#a8ddb5;
 }
 
 .chart text {
@@ -27,3 +36,24 @@
 .x.axis path {
   display: none;
 }
+
+.bar:hover {
+  fill:#43a2ca;
+}
+
+.chart .tooltip {
+}
+
+.tooltip text {
+  fill:#000;
+  text-anchor:start;
+}
+
+.tooltip .tooltip-quarter, .tooltip .tooltip-gdp {
+  font-size:36px;
+}
+
+.tooltip .tooltip-prev, .tooltip {
+  font-size:20px;
+}
+

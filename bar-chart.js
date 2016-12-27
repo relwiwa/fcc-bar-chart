@@ -26,6 +26,37 @@ var chart = d3.select('.chart')
   .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
+var tooltip = chart
+  .append('g')
+    .attr('class', 'tooltip')
+    .style('visibility', 'hidden')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+tooltip.append('text')
+  .attr('class', 'tooltip-quarter')
+  .attr('x', 30)
+  .attr('y', margin.top + 10);
+tooltip.append('text')
+  .attr('class', 'tooltip-gdp')
+  .attr('x', 200)
+  .attr('y', margin.top + 10);
+tooltip.append('text')
+  .attr('class', 'tooltip-prev tooltip-prev-year')
+  .attr('x', 50)
+  .attr('y', margin.top + 60);
+tooltip.append('text')
+  .attr('class', 'tooltip-prev tooltip-prev-year-gdp')
+  .attr('x', 200)
+  .attr('y', margin.top + 60);
+tooltip.append('text')
+  .attr('class', 'tooltip-prev tooltip-prev-quarter')
+  .attr('x', 50)
+  .attr('y', margin.top + 100);
+tooltip.append('text')
+  .attr('class', 'tooltip-prev tooltip-prev-quarter-gdp')
+  .attr('x', 200)
+  .attr('y', margin.top + 100);
+
 d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json', function(error, json) {
   if (error) {
     console.error('Error happened reading JSON data');
@@ -64,12 +95,14 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
         .attr('y', 6)
         .attr('dy', '.71em')
         .style('text-anchor', 'end')
-        .text('GDP in Billion US-$');
+        .text('US GDP in Billion US-$');
     
     chart.selectAll('.bar')
       .data(data)
     .enter().append('rect')
-      .attr('class', 'bar')
+      .attr('class', function(d) {
+        return 'bar q-' + d[0].substring(5, 7);
+      })
       .attr('x', function(d) {
         return x(new Date(d[0]));
       })
@@ -79,7 +112,58 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
       .attr('height', function(d) {
         return height - y(d[1]);
       })
-      .attr('width', width/data.length + 1);
+      .attr('width', width/data.length + 1)
+      .on('mouseover', function(d, k) {
+        // build tooltip-quarter
+        var currentQuarter = extractQuarter(d[0]);
+        d3.select('.tooltip-quarter')
+          .text(currentQuarter + ':');
+        
+        // build tooltip-gdp
+        var formatCurr = d3.format(',.0');
+        d3.select('.tooltip-gdp')
+          .text(formatCurr(d3.round(d[1])) + 'k $');
+      
+        // build tooltip-prev-quarter
+        var prevQuarter = 'No data available for previous quarter';
+        if (k > 0) {
+          prevQuarter = extractQuarter(data[k - 1][0]) + ':';
+        }
+        d3.select('.tooltip-prev-quarter')
+          .text(prevQuarter);
+
+        // build tooltip-prev-quarter-gdp
+        var formatPrev = d3.format('+.2%');
+        var prevQuarterGdp = '';
+        if (k > 0) {
+          prevQuarterGdp = formatPrev(d[1] / data[k - 1][1] - 1);
+        }
+        d3.select('.tooltip-prev-quarter-gdp')
+          .text(prevQuarterGdp);
+      
+        // build tooltip-prev-year
+        var prevYear = 'No data available for previous year';
+        if (k > 3) {
+          prevYear = extractQuarter(data[k - 4][0]) + ':';
+        }
+        d3.select('.tooltip-prev-year')
+          .text(prevYear);
+        
+        // build tooltip-prev-year-gdp
+        var prevYearGdp = '';
+        if (k > 3) {
+          prevYearGdp = formatPrev(d[1] / data[k-4][1] - 1);
+        }
+        d3.select('.tooltip-prev-year-gdp')
+          .text(prevYearGdp);
+
+        d3.select('.tooltip')
+          .style('visibility', 'visible');
+      })
+      .on('mouseleave', function() {
+        d3.select('.tooltip')
+          .style('visibility', 'hidden');
+      });
   } 
 
 });
@@ -89,4 +173,24 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
 function toInteger(d) {
   d.data[1] = +d.data[1];
   return d;
+}
+
+function extractQuarter(d) {
+  var year = d.substring(0, 4);
+  var month = d.substring(5, 7);
+  var quarter = year + '/';
+  switch (month) {
+    case '01':
+      quarter += 'I';
+      break;
+    case '04':
+      quarter += 'II';
+      break;
+    case '07':
+      quarter += 'III';
+      break;
+    case '10':
+      quarter += 'IV';
+  }
+  return quarter;
 }
