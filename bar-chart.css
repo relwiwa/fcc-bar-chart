@@ -42,27 +42,14 @@ h2 {
   display:none;
 }
 
-.tooltip text {
-  fill:#000;
-  text-anchor:start;
-}
-
-.tooltip .tooltip-quarter, .tooltip .tooltip-gdp {
-  font-size:36px;
-}
-
-.tooltip .tooltip-prev, .tooltip {
-  font-size:20px;
-}
-
-.author-driven-gdp {
+.bg-tooltip-gdp {
   font-size:18px;
 }
 
-.author-driven-year {
+.bg-tooltip-year {
   font-size:40px;
 }
 
-.author-driven-currency {
+.bg-tooltip-currency {
   display:none;
 }

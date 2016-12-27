@@ -37,66 +37,28 @@ var yAxis = d3.svg.axis()
   })
   .outerTickSize(0);
 
-// author-driven narrative elements
+// background-tooltip elements
 
-var authorDrivenDisplay = chart
+var bgTooltip = chart
   .append('g')
-    .attr('class', 'author-driven-narrative')
+    .attr('class', 'bg-tooltip')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-authorDrivenDisplay.append('text')
-  .attr('class', 'author-driven-gdp')
+bgTooltip.append('text')
+  .attr('class', 'bg-tooltip-gdp')
   .attr('x', 30)
-  .attr('y', margin.top + 130);
+  .attr('y', margin.top + 100);
 
-authorDrivenDisplay.append('text')
-  .attr('class', 'author-driven-currency')
-  .attr('x', 50)
-  .attr('y', margin.top + 260)
+bgTooltip.append('text')
+  .attr('class', 'bg-tooltip-currency')
+  .attr('x', 30)
+  .attr('y', margin.top + 230)
   .text('Billion US-$');
 
-authorDrivenDisplay.append('text')
-  .attr('class', 'author-driven-year')
+bgTooltip.append('text')
+  .attr('class', 'bg-tooltip-year')
   .attr('x', 30)
-  .attr('y', height - 70);
-
-// tooltip elements
-
-var tooltip = chart
-  .append('g')
-    .attr('class', 'tooltip')
-    .style('visibility', 'hidden')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-tooltip.append('text')
-  .attr('class', 'tooltip-quarter')
-  .attr('x', 30)
-  .attr('y', margin.top + 10);
-tooltip.append('text')
-  .attr('class', 'tooltip-gdp')
-  .attr('x', 200)
-  .attr('y', margin.top + 10);
-tooltip.append('text')
-  .attr('class', 'tooltip-prev')
-  .attr('x', 50)
-  .attr('y', margin.top + 80)
-  .text('Comparison To Previous Quarters:');
-tooltip.append('text')
-  .attr('class', 'tooltip-prev tooltip-prev-year')
-  .attr('x', 50)
-  .attr('y', margin.top + 120);
-tooltip.append('text')
-  .attr('class', 'tooltip-prev tooltip-prev-year-gdp')
-  .attr('x', 200)
-  .attr('y', margin.top + 120);
-tooltip.append('text')
-  .attr('class', 'tooltip-prev tooltip-prev-quarter')
-  .attr('x', 50)
-  .attr('y', margin.top + 170);
-tooltip.append('text')
-  .attr('class', 'tooltip-prev tooltip-prev-quarter-gdp')
-  .attr('x', 200)
-  .attr('y', margin.top + 170);
+  .attr('y', height - 100);
 
 // load external JSON-data
 
@@ -170,7 +132,7 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
 
       // change font-size of displayed gdp amount
 
-      var fontSize = d3.select('.author-driven-gdp')
+      var fontSize = d3.select('.bg-tooltip-gdp')
         .style('font-size');
       fontSize = fontSize.substring(0, fontSize.length - 2);
       fontSize = +fontSize;
@@ -182,10 +144,10 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
 
       d3.select('.k-' + authorDrivenCounter)
         .style('display', 'block');
-      d3.select('.author-driven-gdp')
+      d3.select('.bg-tooltip-gdp')
         .text(formatCurrGdp(d3.round(data[authorDrivenCounter][1])))
         .style('font-size', fontSize);
-      d3.select('.author-driven-year')
+      d3.select('.bg-tooltip-year')
         .text(data[authorDrivenCounter][0].substring(0, 4));
       authorDrivenCounter++;
 
@@ -195,18 +157,17 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
         
         // increase font size and display currency for final frame of narrative
         
-        d3.select('.author-driven-currency')
+        d3.select('.bg-tooltip-currency')
           .style('font-size', fontSize * 0.7)
           .style('display', 'block');
-        d3.select('.author-driven-year')
-          .style('font-size', fontSize * 0.7)
-          .attr('x', 50);
+        d3.select('.bg-tooltip-year')
+          .style('font-size', fontSize * 0.7);
         clearInterval(authorDrivenInterval);
         
         // set timeout until final frame gets hidden
         
         setTimeout(function() {
-          d3.select('.author-driven-narrative')
+          d3.select('.bg-tooltip')
             .style('display', 'none');
 
           // enable user-driven narrative
@@ -220,64 +181,28 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
               // build tooltip-quarter
 
               var currentQuarter = extractQuarter(d[0]);
-              d3.select('.tooltip-quarter')
-                .text(currentQuarter + ':');
+              d3.select('.bg-tooltip-year')
+                .text(currentQuarter);
 
               // build tooltip-gdp
 
-              d3.select('.tooltip-gdp')
-                .text(formatCurrGdp(d3.round(d[1])) + ' Billion US-$');
+              d3.select('.bg-tooltip-gdp')
+                .text(formatCurrGdp(d3.round(d[1])));
 
-              // build tooltip-prev-quarter
-
-              var prevQuarter = 'No data available for previous quarter';
-              if (k > 0) {
-                prevQuarter = extractQuarter(data[k - 1][0]) + ':';
-              }
-              d3.select('.tooltip-prev-quarter')
-                .text(prevQuarter);
-
-              // build tooltip-prev-quarter-gdp
-
-              var prevQuarterGdp = '';
-              if (k > 0) {
-                prevQuarterGdp = formatPrev(d[1] / data[k - 1][1] - 1);
-              }
-              d3.select('.tooltip-prev-quarter-gdp')
-                .text(prevQuarterGdp);
-
-              // build tooltip-prev-year
-
-              var prevYear = 'No data available for previous year';
-              if (k > 3) {
-                prevYear = extractQuarter(data[k - 4][0]) + ':';
-              }
-              d3.select('.tooltip-prev-year')
-                .text(prevYear);
-
-              // build tooltip-prev-year-gdp
-
-              var prevYearGdp = '';
-              if (k > 3) {
-                prevYearGdp = formatPrev(d[1] / data[k-4][1] - 1);
-              }
-              d3.select('.tooltip-prev-year-gdp')
-                .text(prevYearGdp);
-
-              d3.select('.tooltip')
-                .style('visibility', 'visible');
+              d3.select('.bg-tooltip')
+                .style('display', 'block');
             })
             .on('mouseleave', function() {
               d3.select(this)
                 .style('fill', '#a8ddb5');
             
-              d3.select('.tooltip')
-                .style('visibility', 'hidden');
+              d3.select('.bg-tooltip')
+                .style('display', 'none');
             });
 
-          }, 5000);
+          }, 3500);
       }
-    }, 50);
+    }, 40);
   } 
 
 });
