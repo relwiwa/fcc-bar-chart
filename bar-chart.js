@@ -7,6 +7,9 @@ var margin = {
 var width = 1080 - margin.left - margin.right;
 var height = 600 - margin.top - margin.bottom;
 
+var formatCurrGdp = d3.format(',.0');
+var formatPrev = d3.format('+.2%');
+
 // functions that maps values to y coords in chart
 var y = d3.scale.linear()
   .range([height, 0]);
@@ -25,6 +28,27 @@ var chart = d3.select('.chart')
   .attr('height', height + margin.top + margin.bottom)
   .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+var authorDrivenDisplay = chart
+  .append('g')
+    .attr('class', 'author-driven-narrative')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+authorDrivenDisplay.append('text')
+  .attr('class', 'author-driven-gdp')
+  .attr('x', 30)
+  .attr('y', margin.top + 130);
+
+authorDrivenDisplay.append('text')
+  .attr('class', 'author-driven-currency')
+  .attr('x', 50)
+  .attr('y', margin.top + 260)
+  .text('Billion US-$');
+
+authorDrivenDisplay.append('text')
+  .attr('class', 'author-driven-year')
+  .attr('x', 30)
+  .attr('y', height - 70);
 
 var tooltip = chart
   .append('g')
@@ -105,8 +129,8 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
     chart.selectAll('.bar')
       .data(data)
     .enter().append('rect')
-      .attr('class', function(d) {
-        return 'bar q-' + d[0].substring(5, 7);
+      .attr('class', function(d, k) {
+        return 'bar q-' + d[0].substring(5, 7) + ' k-' + k;
       })
       .attr('x', function(d) {
         return x(new Date(d[0]));
@@ -117,58 +141,94 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
       .attr('height', function(d) {
         return height - y(d[1]);
       })
-      .attr('width', width/data.length + 1)
-      .on('mouseover', function(d, k) {
-        // build tooltip-quarter
-        var currentQuarter = extractQuarter(d[0]);
-        d3.select('.tooltip-quarter')
-          .text(currentQuarter + ':');
-        
-        // build tooltip-gdp
-        var formatCurr = d3.format(',.0');
-        d3.select('.tooltip-gdp')
-          .text(formatCurr(d3.round(d[1])) + ' Billion US-$');
-      
-        // build tooltip-prev-quarter
-        var prevQuarter = 'No data available for previous quarter';
-        if (k > 0) {
-          prevQuarter = extractQuarter(data[k - 1][0]) + ':';
-        }
-        d3.select('.tooltip-prev-quarter')
-          .text(prevQuarter);
+      .attr('width', width/data.length + 1);
+    
+    // Add author-driven animation
+    
+    var authorDrivenCounter = 0;
+    var authorDrivenInterval = setInterval(function(d) {
+      var fontSize = d3.select('.author-driven-gdp')
+        .style('font-size');
+      fontSize = fontSize.substring(0, fontSize.length - 2);
+      fontSize = +fontSize;
+      if (authorDrivenCounter > 0) {
+        fontSize = fontSize * ((((data[authorDrivenCounter][1] / data[(authorDrivenCounter - 1)][1]) - 1) / 2) + 1);
+      }
+      d3.select('.k-' + authorDrivenCounter)
+        .style('display', 'block');
+      d3.select('.author-driven-gdp')
+        .text(formatCurrGdp(d3.round(data[authorDrivenCounter][1])))
+        .style('font-size', fontSize);
+      d3.select('.author-driven-year')
+        .text(data[authorDrivenCounter][0].substring(0, 4));
+      authorDrivenCounter++;
 
-        // build tooltip-prev-quarter-gdp
-        var formatPrev = d3.format('+.2%');
-        var prevQuarterGdp = '';
-        if (k > 0) {
-          prevQuarterGdp = formatPrev(d[1] / data[k - 1][1] - 1);
-        }
-        d3.select('.tooltip-prev-quarter-gdp')
-          .text(prevQuarterGdp);
-      
-        // build tooltip-prev-year
-        var prevYear = 'No data available for previous year';
-        if (k > 3) {
-          prevYear = extractQuarter(data[k - 4][0]) + ':';
-        }
-        d3.select('.tooltip-prev-year')
-          .text(prevYear);
-        
-        // build tooltip-prev-year-gdp
-        var prevYearGdp = '';
-        if (k > 3) {
-          prevYearGdp = formatPrev(d[1] / data[k-4][1] - 1);
-        }
-        d3.select('.tooltip-prev-year-gdp')
-          .text(prevYearGdp);
+      if (authorDrivenCounter >= data.length) {
+        d3.select('.author-driven-currency')
+          .style('font-size', fontSize * 0.7)
+          .style('display', 'block');
+        d3.select('.author-driven-year')
+          .style('font-size', fontSize * 0.7)
+          .attr('x', 50);
+        clearInterval(authorDrivenInterval);
+        setTimeout(function() {
+          d3.select('.author-driven-narrative')
+            .style('display', 'none');
 
-        d3.select('.tooltip')
-          .style('visibility', 'visible');
-      })
-      .on('mouseleave', function() {
-        d3.select('.tooltip')
-          .style('visibility', 'hidden');
-      });
+          d3.selectAll('.bar')
+            .on('mouseover', function(d, k) {
+              // build tooltip-quarter
+              var currentQuarter = extractQuarter(d[0]);
+              d3.select('.tooltip-quarter')
+                .text(currentQuarter + ':');
+
+              // build tooltip-gdp
+              d3.select('.tooltip-gdp')
+                .text(formatCurrGdp(d3.round(d[1])) + ' Billion US-$');
+
+              // build tooltip-prev-quarter
+              var prevQuarter = 'No data available for previous quarter';
+              if (k > 0) {
+                prevQuarter = extractQuarter(data[k - 1][0]) + ':';
+              }
+              d3.select('.tooltip-prev-quarter')
+                .text(prevQuarter);
+
+              // build tooltip-prev-quarter-gdp
+              var prevQuarterGdp = '';
+              if (k > 0) {
+                prevQuarterGdp = formatPrev(d[1] / data[k - 1][1] - 1);
+              }
+              d3.select('.tooltip-prev-quarter-gdp')
+                .text(prevQuarterGdp);
+
+              // build tooltip-prev-year
+              var prevYear = 'No data available for previous year';
+              if (k > 3) {
+                prevYear = extractQuarter(data[k - 4][0]) + ':';
+              }
+              d3.select('.tooltip-prev-year')
+                .text(prevYear);
+
+              // build tooltip-prev-year-gdp
+              var prevYearGdp = '';
+              if (k > 3) {
+                prevYearGdp = formatPrev(d[1] / data[k-4][1] - 1);
+              }
+              d3.select('.tooltip-prev-year-gdp')
+                .text(prevYearGdp);
+
+              d3.select('.tooltip')
+                .style('visibility', 'visible');
+            })
+            .on('mouseleave', function() {
+              d3.select('.tooltip')
+                .style('visibility', 'hidden');
+            });
+
+          }, 5000);
+      }
+    }, 50);
   } 
 
 });

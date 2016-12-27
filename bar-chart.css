@@ -38,6 +38,10 @@ h2 {
   display: none;
 }
 
+.bar {
+  display:none;
+}
+
 .bar:hover {
   fill:#43a2ca;
 }
@@ -55,3 +59,14 @@ h2 {
   font-size:20px;
 }
 
+.author-driven-gdp {
+  font-size:18px;
+}
+
+.author-driven-year {
+  font-size:40px;
+}
+
+.author-driven-currency {
+  display:none;
+}
