@@ -41,21 +41,26 @@ tooltip.append('text')
   .attr('x', 200)
   .attr('y', margin.top + 10);
 tooltip.append('text')
+  .attr('class', 'tooltip-prev')
+  .attr('x', 50)
+  .attr('y', margin.top + 80)
+  .text('Comparison To Previous Quarters:');
+tooltip.append('text')
   .attr('class', 'tooltip-prev tooltip-prev-year')
   .attr('x', 50)
-  .attr('y', margin.top + 60);
+  .attr('y', margin.top + 120);
 tooltip.append('text')
   .attr('class', 'tooltip-prev tooltip-prev-year-gdp')
   .attr('x', 200)
-  .attr('y', margin.top + 60);
+  .attr('y', margin.top + 120);
 tooltip.append('text')
   .attr('class', 'tooltip-prev tooltip-prev-quarter')
   .attr('x', 50)
-  .attr('y', margin.top + 100);
+  .attr('y', margin.top + 170);
 tooltip.append('text')
   .attr('class', 'tooltip-prev tooltip-prev-quarter-gdp')
   .attr('x', 200)
-  .attr('y', margin.top + 100);
+  .attr('y', margin.top + 170);
 
 d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json', function(error, json) {
   if (error) {
@@ -122,7 +127,7 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
         // build tooltip-gdp
         var formatCurr = d3.format(',.0');
         d3.select('.tooltip-gdp')
-          .text(formatCurr(d3.round(d[1])) + 'k $');
+          .text(formatCurr(d3.round(d[1])) + ' Billion US-$');
       
         // build tooltip-prev-quarter
         var prevQuarter = 'No data available for previous quarter';
