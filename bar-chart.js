@@ -34,7 +34,8 @@ var yAxis = d3.svg.axis()
   .tickFormat(function (d) {
     d = d/1000;
     return d + "k";
-  });
+  })
+  .outerTickSize(0);
 
 // author-driven narrative elements
 
