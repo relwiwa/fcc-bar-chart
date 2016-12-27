@@ -212,6 +212,9 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
           
           d3.selectAll('.bar')
             .on('mouseover', function(d, k) {
+            
+              d3.select(this)
+                .style('fill', '#43a2ca');
 
               // build tooltip-quarter
 
@@ -264,6 +267,9 @@ d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/mas
                 .style('visibility', 'visible');
             })
             .on('mouseleave', function() {
+              d3.select(this)
+                .style('fill', '#a8ddb5');
+            
               d3.select('.tooltip')
                 .style('visibility', 'hidden');
             });

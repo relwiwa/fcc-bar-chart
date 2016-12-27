@@ -42,10 +42,6 @@ h2 {
   display:none;
 }
 
-.bar:hover {
-  fill:#43a2ca;
-}
-
 .tooltip text {
   fill:#000;
   text-anchor:start;
