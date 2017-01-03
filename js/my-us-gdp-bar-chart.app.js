@@ -1,0 +1,1 @@
+var usGdp = new MyUsGdp();

@@ -1,32 +1,7 @@
-function MyUsGdp() {
-	this.data = null;
-	this.barChart = null;
-	
-	d3.json('https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json', function(error, json) {
-		if (error) {
-			console.error('Error happened reading JSON data');
-		}
-		else {
-			this.data = json.data;
-			this.barChart = new MyBarChart(this.data);
-			this.barChart.createChart();
-			this.barChart.addXAxis();
-			this.barChart.addYAxis();
-			this.barChart.addBars();
-			this.barChart.addBackgroundTooltips();
-			this.barChart.setupAuthorDrivenNarrative();
-		}
-	});
-}
-
-var x = new MyUsGdp();
-
-
 function MyBarChart(data) {
-	
 	this.chart = {};
 	this.data = data;
-	this.helper = new Helper();
+	this.helper = new MyHelper();
 
 	// SVG properties
 	this.props = {};
@@ -44,7 +19,6 @@ function MyBarChart(data) {
 		currGdp: d3.format(',.0'),
 		prev: d3.format('+.2%')
 	};
-
 }
 
 MyBarChart.prototype.createChart = function() {
@@ -235,32 +209,4 @@ MyBarChart.prototype.startUserDrivenNarrative = function() {
 		d3.select('.bg-tooltip')
 			.style('display', 'none');
 	});
-}
-
-
-function Helper() { }
-
-Helper.prototype.toInteger = function(d) {
-  d.data[1] = +d.data[1];
-  return d;
-}
-
-Helper.prototype.extractQuarter = function(d) {
-  var year = d.substring(0, 4);
-  var month = d.substring(5, 7);
-  var quarter = year + '/';
-  switch (month) {
-    case '01':
-      quarter += 'I';
-      break;
-    case '04':
-      quarter += 'II';
-      break;
-    case '07':
-      quarter += 'III';
-      break;
-    case '10':
-      quarter += 'IV';
-  }
-  return quarter;
 }
