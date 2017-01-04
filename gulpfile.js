@@ -3,6 +3,7 @@ var browserSync = require('browser-sync').create();
 var cleanCss = require('gulp-clean-css');
 var concat = require('gulp-concat');
 var gulp = require('gulp');
+var htmlmin = require('gulp-htmlmin');
 var uglify = require('gulp-uglify');
 
 gulp.task('default', ['update-html', 'update-scripts', 'update-css'], function() {
@@ -44,6 +45,9 @@ gulp.task('create-dist', [
 
 gulp.task('to-dist-html', function() {
   gulp.src('dev/**/*.html')
+    .pipe(htmlmin({
+      collapseWhitespace: true
+    }))
     .pipe(gulp.dest('dist'));
 });
 
