@@ -22,11 +22,13 @@ function MyBarChart(data) {
 }
 
 MyBarChart.prototype.createChart = function() {
-	this.chart.svg = d3.select('.chart')
-  .attr('width', this.props.width + this.props.margin.left + this.props.margin.right)
-  .attr('height', this.props.height + this.props.margin.top + this.props.margin.bottom)
-  .append('g')
-    .attr('transform', 'translate(' + this.props.margin.left + ',' + this.props.margin.top + ')');
+	this.chart.svg = d3.select('body')
+	.append('svg')
+		.attr('class', 'bar-chart')
+		.attr('width', this.props.width + this.props.margin.left + this.props.margin.right)
+		.attr('height', this.props.height + this.props.margin.top + this.props.margin.bottom)
+		.append('g')
+			.attr('transform', 'translate(' + this.props.margin.left + ',' + this.props.margin.top + ')');
 	return this.chart;	
 }
 
