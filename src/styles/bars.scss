@@ -1,5 +1,9 @@
 @import './us-gdp-bar-chart.general.scss';
 
 .bar {
-  fill:$colorPrimary;
+  fill:$colorBars;
+}
+
+.bar:hover {
+  fill:$colorBarsActive;
 }

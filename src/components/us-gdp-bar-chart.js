@@ -52,7 +52,7 @@ class UsGdpBarChart extends Component {
     return (
       <div className="us-gdp-bar-chart row">
         <div ref={(el) => { this.chartContainer = el }} className="column small-12">
-          <h1 className="text-center">Seven Decades of US GDP</h1>
+          <h1 className="text-center">Growth of US GDP</h1>
           {chartWidth && <BarChart
             chartWidth={chartWidth}
             data={this.prepareData(usGdpData.data)}
