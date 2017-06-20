@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
-import { scaleLinear } from 'd3-scale';
 
 import '../styles/bars.scss';
 
 const Bars = (props) => {
-  const { barWidth, data, margins, onUpdateCurrBar, svgDimensions: { height, width }, xScale, yScale } = props;
+  const { barWidth, chartHeight, gdpData, margins, onUpdateCurrGdpDatum, styleSpex, xScale, yScale } = props;
 
   return (
-    <g>
-      {data.map(datum => {
+    <g className="bars">
+      {gdpData.map(datum => {
         return (
-        <rect
-          className="bar"
-          key={datum[0]}
-          x={xScale(datum[0])}
-          y={yScale(datum[1])}
-          height={height - margins.bottom - yScale(datum[1])}
-          width={barWidth}
-          onMouseEnter={onUpdateCurrBar !== null ? () => onUpdateCurrBar(datum) : null}
-          onMouseLeave={onUpdateCurrBar !== null ? () => onUpdateCurrBar(null) : null}
-        />
-      )})}
+          <rect
+            className="bar"
+            fill={styleSpex.colorBars}
+            height={chartHeight - margins.bottom - yScale(datum.gdpAmount)}
+            key={datum.year + datum.quarter}
+            onMouseEnter={() => onUpdateCurrGdpDatum(datum)}
+            onMouseLeave={() => onUpdateCurrGdpDatum(null)}
+            width={barWidth}
+            x={xScale(datum.dateObject)}
+            y={yScale(datum.gdpAmount)}
+          />
+        );
+      })}
     </g>
   );
 }

@@ -2,9 +2,9 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import './global-styles.scss';
-import UsGdpBarChart from './components/us-gdp-bar-chart';
+import UsGdpChart from './components/us-gdp-chart';
 
 render(
-  <UsGdpBarChart />,
+  <UsGdpChart />,
   document.getElementById('root')
 );
