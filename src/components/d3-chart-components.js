@@ -44,7 +44,7 @@ class D3ChartComponents extends Component {
     const { maxXValue, minXValue } = maxMinValues;
     return d3ScaleTime()
       .domain([ minXValue, maxXValue ])
-      .range([margins.left + 1, chartWidth]);
+      .range([margins.left + 1, chartWidth - margins.right]);
   }
 
   calculateYScale(chartHeight, margins, maxMinValues)  {
@@ -59,7 +59,7 @@ class D3ChartComponents extends Component {
     const { xScale, yScale } = this.state;
 
     return(
-      <g>
+      <g style={{width: chartWidth, height: chartHeight, background:'pink'}}>
         <Axis
           axisFunction={d3AxisBottom}
           scale={xScale}
@@ -82,7 +82,7 @@ class D3ChartComponents extends Component {
           legend='Billion US-$'
         />
         <Bars
-          barWidth={(chartWidth/gdpData.length + 1)}
+          barWidth={((chartWidth - margins.right)/gdpData.length + 1)}
           chartHeight={chartHeight}
           gdpData={gdpData}
           margins={margins}

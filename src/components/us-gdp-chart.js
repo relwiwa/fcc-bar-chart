@@ -48,8 +48,23 @@ class UsGdpChart extends Component {
   }
 
   calculateWidth () {
+    const containerComputedStyles = getComputedStyle(this.chartContainer);
+    const containerDimensions = {
+      width: containerComputedStyles['width'],
+      paddingLeft: containerComputedStyles['padding-left'],
+      paddingRight: containerComputedStyles['padding-right']
+    }
+
+    // get rid of 'px'
+    for (let property in containerDimensions) {
+      containerDimensions[property] = containerDimensions[property].substr(0, containerDimensions[property].length - 2);
+    }
+
+    let { paddingLeft, paddingRight, width } = containerDimensions;
+    width = width - paddingLeft - paddingRight;
+    console.log(getComputedStyle(this.chartContainer)['padding-left']);
     this.setState({
-      containerWidth: this.chartContainer.getBoundingClientRect().width,
+      containerWidth: width,
     });
   }
 

@@ -5,7 +5,7 @@ const SPEX = {
       top: 10,
       right: 20,
       bottom: 30,
-      left: 30
+      left: 35
     },
     ratioFactor: 0.6,
     xAxis: {

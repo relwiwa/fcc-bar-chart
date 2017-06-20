@@ -28,11 +28,11 @@ class ChartContainer extends Component {
   }
 
   calculateChartHeight(containerWidth, margins, ratioFactor) {
-    return containerWidth * ratioFactor - margins.top - margins.bottom;
+    return containerWidth * ratioFactor;
   }
 
   calculateChartWidth(containerWidth, margins) {
-    return containerWidth - margins.left - margins.right;
+    return containerWidth;
   }
 
   setChartDimensions(containerWidth, margins, ratioFactor) {
@@ -48,7 +48,7 @@ class ChartContainer extends Component {
 
     return (
       <div style={{position: 'relative'}}>
-        <svg style={{border: '1px solid ' + styleSpex.colorBorders, height: chartHeight, width: '100%'}}>
+        <svg style={{border: '1px solid ' + styleSpex.colorBorders}} height={chartHeight} width={chartWidth - 2}>
           {gdpData.length > 0 && <D3ChartComponents
             chartHeight={chartHeight}
             chartWidth={chartWidth}
