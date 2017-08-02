@@ -5,14 +5,12 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import es6Promise from 'es6-promise';
 
 import ChartContainer from './chart-container';
 
 import additionalUsGdpData from '../data/additional-us-gdp-data.json';
 import SPEX from '../data/us-gdp-chart.spex';
 
-es6Promise.polyfill();
 const axiosConfig = axios.create({
   timeout: 5000
 });
