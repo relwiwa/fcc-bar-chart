@@ -2,5 +2,13 @@
 
 @include foundation-global-styles;
 @include foundation-typography;
-@include foundation-grid;
 @include foundation-visibility-classes;
+@include foundation-xy-grid-classes(
+  $base-grid: true,
+  $margin-grid: false,
+  $padding-grid: true,
+  $block-grid: false,
+  $collapse: false,
+  $offset: true,
+  $vertical-grid: false
+);

@@ -60,7 +60,6 @@ class UsGdpChart extends Component {
 
     let { paddingLeft, paddingRight, width } = containerDimensions;
     width = width - paddingLeft - paddingRight;
-    console.log(getComputedStyle(this.chartContainer)['padding-left']);
     this.setState({
       containerWidth: width,
     });
@@ -141,22 +140,24 @@ class UsGdpChart extends Component {
     const { containerWidth, currGdpDatum, errorMessage, maxMinValues, preparedData, progressMessage } = this.state;
 
     return (
-      <div className="row">
-        <div ref={(el) => this.chartContainer = el} className="column small-12 text-center">
-          <h1>Quarterly US GDP</h1>
-          <p>This chart displays the quarterly US Gross Domestic Product from January 1947 until January 2017</p>
-          {errorMessage && <p>An error happened while fetching data</p>}
-          {progressMessage && <p><i className="fa fa-spinner fa-spin"></i> Fetching data</p>}
-          {(containerWidth !== null && !errorMessage) && <ChartContainer
-            chartSpex={SPEX.chart}
-            containerWidth={containerWidth}
-            containerHeight={containerWidth * 0.6}
-            currGdpDatum={currGdpDatum}
-            gdpData={preparedData}
-            maxMinValues={maxMinValues}
-            onUpdateCurrGdpDatum={(datum) => this.setState({currGdpDatum: datum})}
-            styleSpex={SPEX.styles}
-          />}
+      <div className="grid-container grid-container-padded">
+        <div className="grid-x">
+          <div ref={(el) => this.chartContainer = el} className="cell text-center">
+            <h1>Quarterly US GDP</h1>
+            <p>This chart displays the quarterly US Gross Domestic Product from January 1947 until January 2017</p>
+            {errorMessage && <p>An error happened while fetching data</p>}
+            {progressMessage && <p><i className="fa fa-spinner fa-spin"></i> Fetching data</p>}
+            {(containerWidth !== null && !errorMessage) && <ChartContainer
+              chartSpex={SPEX.chart}
+              containerWidth={containerWidth}
+              containerHeight={containerWidth * 0.6}
+              currGdpDatum={currGdpDatum}
+              gdpData={preparedData}
+              maxMinValues={maxMinValues}
+              onUpdateCurrGdpDatum={(datum) => this.setState({currGdpDatum: datum})}
+              styleSpex={SPEX.styles}
+            />}
+          </div>
         </div>
       </div>
     );
