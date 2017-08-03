@@ -75,7 +75,7 @@ class D3ChartComponents extends Component {
           ticks={yAxis.ticks * chartWidth * 0.001}
           tickSizeOuter={yAxis.tickSizeOuter}
           tickFormat={(d) => d/1000 + 'k'}
-          translate={`translate(${margins.left}, 0)`}
+          translate={`translate(${margins.left}, -1)`}
         />
         <AxisLegend
           margins={margins}

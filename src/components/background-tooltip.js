@@ -6,6 +6,8 @@ const BackgroundTooltip = (props) => {
 
   const styles = {
     position: 'absolute',
+    background: '#ffffff',
+    color: '#000000',
     top: 0,
     left: 20,
     fontSize: (72 * 0.001 * chartWidth) + 'px',
