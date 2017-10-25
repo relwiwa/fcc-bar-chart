@@ -131,7 +131,6 @@ class UsGdpChart extends Component {
         minXValue: minXValue,
       },
       progressMessage: null,
-      currGdpDatum: preparedData[0],
       preparedData: preparedData,
     });
   };
