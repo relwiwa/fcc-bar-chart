@@ -1,3 +1,5 @@
+import { colors } from '../../../config/styles';
+
 const SPEX = {
   dataUrl: 'https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json',
   chart: {
@@ -15,13 +17,11 @@ const SPEX = {
     yAxis: {
       ticks: 8,
       tickSizeOuter: 0
-    }
+    },
   },
   styles: {
-    colorBars: 'lightblue',
-    colorBarsActive: 'rgba(255, 174, 0, 0.7)',
-    colorBorders: 'lightgray'    
-  }
-}
+    colorBars: colors.primary,
+  },
+};
 
 export default SPEX;
