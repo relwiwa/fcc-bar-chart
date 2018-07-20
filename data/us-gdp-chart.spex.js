@@ -20,7 +20,7 @@ const SPEX = {
     },
   },
   styles: {
-    colorBars: colors.primary,
+    colorBars: colors.primaryLight,
   },
 };
 
